@@ -1,0 +1,62 @@
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+  ticker(symbol: String): Ticker
+  allTickers: [Ticker]
+}
+
+type Subscription {
+  ticker(symbol: String): Ticker
+}
+
+# A ticker for a single currency on a single exchange
+type Ticker implements Node {
+  # The ID of an object
+  id: ID!
+
+  # ticker symbol
+  symbol: String
+
+  # ticker data timestamp
+  timestamp: String
+
+  # ticker data datetime
+  datetime: String
+
+  # ticker high point
+  high: Float
+
+  # ticker low point
+  low: Float
+
+  # ticker bid price
+  bid: Float
+
+  # ticker ask price
+  ask: Float
+
+  # Volume-weighted object
+  vwap: Float
+
+  # ticker opening price
+  open: Float
+
+  # ticker last price
+  last: Float
+
+  # ticker base volume
+  baseVolume: Float
+
+  # ticker quote volume
+  quoteVolume: Float
+}
+

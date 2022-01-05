@@ -1,0 +1,11 @@
+// @TODO: protobuf
+package message;
+syntax = "proto3";
+
+message Message {
+  required message = 1
+}
+
+message Messages {
+  repeated Message messages = 2
+}

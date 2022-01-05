@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+
+.DS_Store
+.npmrc
+*.rdb
+
+# Dependency directory
+node_modules
+.tmp
+
+# Generated files
+dist
+lib
+build
+**__generated__**

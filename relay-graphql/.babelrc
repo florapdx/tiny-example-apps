@@ -1,0 +1,19 @@
+
+{
+  "plugins": [
+    "transform-async-generator-functions",
+    "transform-object-assign",
+    "react-hot-loader/babel",
+    "relay"
+  ],
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "8.6.0"
+      }
+    }],
+    "stage-1",
+    "react",
+    "flow"
+  ]
+}

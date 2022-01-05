@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Ticker test app</title>
+    <meta name="description" content="test A/B message generation and display">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="main">
+      <h1 style="margin-left: 40px">Ticker test app: plain JS</h1>
+      <div id="app">
+          <table>
+            <thead>
+              <tr></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+      </div>
+      <script>
+        var socket = new WebSocket('ws://localhost:3000/tickers');
+
+        const tickerState = {};
+        let isFirstRow = true;
+
+        const tbody = document.querySelector('tbody');
+
+        let dataKeys = [];
+
+        socket.addEventListener('message', (message) => {
+          const data = JSON.parse(message.data);
+          delete data.info; // skip this complex nested object for now
+
+          dataKeys = dataKeys.concat(Object.keys(data).filter(key => key !== 'info' && dataKeys.indexOf(key) === -1));
+          const selector = data.symbol.replace('/', '-').toLowerCase();
+
+          let tr = null;
+          if (!tickerState[selector]) {
+            tr = document.createElement('tr');
+            tr.className = selector;
+            tbody.appendChild(tr);
+            tickerState[selector] = data;
+          } else {
+            tr = document.querySelector(`.${selector}`);
+          }
+
+          dataKeys.forEach(key => {
+            // Make sure we have a col header cell for that key
+            if (!document.querySelector(`thead tr .${key}`)) {
+              const th = document.createElement('th');
+              th.className = key;
+              th.innerText = key;
+              document.querySelector('thead tr').appendChild(th);
+            }
+
+            let td = tr.querySelector(`.${key}`);
+            if (!td) {
+              td = document.createElement('td');
+              td.className = `${key}`;
+            }
+            td.innerText = data[key] || '';
+            tr.appendChild(td);
+          });
+
+          isFirstRow = false;
+        });
+      </script>
+    </div>
+  </body>
+</html>
